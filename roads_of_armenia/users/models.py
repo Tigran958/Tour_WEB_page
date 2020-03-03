@@ -77,6 +77,8 @@ class GuideImageModel(models.Model):
 
 
 class TourAgents(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE, related_name='touragents')    
     language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
     tour_type = models.IntegerField(_('tour_type'), choices=TOUR_CHOICES)
