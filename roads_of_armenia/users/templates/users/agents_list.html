@@ -1,0 +1,31 @@
+<h1>Tour Agents</h1>
+
+{% for i in agents %}
+<h2>Tour Agent</h2>
+<li>
+	bank account: {{i.user.bank_account}}
+</li>
+
+<li>
+	Name: {{i.user.name}}
+</li>
+
+<li>
+	Phone number:{{i.user.phone_number}}
+</li>
+
+<li>
+	Language: {{i.get_language_display }}
+</li>
+<li>
+	About agent: {{i.about_me}}
+</li>
+<li>
+	Tour type: {{ i.get_tour_type_display }}
+</li>
+
+<br>
+<br>
+<br>
+
+{% endfor %}

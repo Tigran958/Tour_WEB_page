@@ -1,0 +1,39 @@
+<h1>GuideList</h1>
+
+{% for i in guides %}
+<h2>Guide</h2>
+<li>
+	bank account: {{i.user.bank_account}}
+</li>
+
+<li>
+	Name: {{i.user.name}}
+</li>
+
+<li>
+	Phone number:{{i.user.phone_number}}
+</li>
+<br>
+<li>
+	Language:{{i.get_language_display}}
+</li>
+<li>
+	About Guide:{{i.about_me}}
+</li>
+<li>
+	First to ten price:{{i.first_to_ten_price}}
+</li>
+<li>
+	Ten plus one price:{{i.ten_plus_one_price}}
+</li>
+<li>
+	Location:{{i.location}}
+</li>
+<li>
+	Location based price:{{i.location_based_price}}
+</li>
+<br>
+<br>
+<br>
+
+{% endfor %}

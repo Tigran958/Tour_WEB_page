@@ -1,0 +1,20 @@
+  <div class="login_container">
+    <form action="" method="post">
+      {% csrf_token %}
+
+      <div class="form_container">
+        <p class="form_title">Login Form</p>
+        
+        <label for="uname"><b>Username</b></label>
+
+        {{ form.username }}
+
+        <label for="psw"><b>Password</b></label>
+
+        {{ form.password }}
+
+        <button name="submit" value="username,password" type="submit">Login</button>
+
+      </div>
+    </form>
+  </div>

@@ -1,10 +1,10 @@
-from django.contrib.auth import login
-from django.shortcuts import redirect, render
+from django.contrib.auth import login,logout
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import CreateView
 from django.urls import reverse
 
 from .forms import CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
-from .models import User
+from .models import User, Driver, CarImageModel, Guide, TourAgents
 
 
 def home(request):
@@ -49,4 +49,37 @@ class UserSignUpView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return redirect("/")
+        return 'reg_home'
+
+def client_page(request):
+    return render(request, 'users/client_page.html')
+
+def driver_list(request):
+    drivers = Driver.objects.all().prefetch_related("aa")
+    print(drivers[0].aa.__dict__)
+
+    context = {'drivers':drivers}
+
+    return render(request, 'users/driver_list.html', context)
+
+def guide_list(request):
+    guides = Guide.objects.all()
+
+    context = {'guides':guides}
+
+    return render(request, 'users/guide_list.html', context)  
+
+def agent_list(request):
+    agents = TourAgents.objects.all()
+
+    context = {'agents':agents}
+
+    return render(request, 'users/agents_list.html', context)  
+
+
+def login_1(request):
+    return redirect('up/client_page')
+
+def u_logout(request):
+    logout(request)
+    return redirect('/sign/up/client_page')

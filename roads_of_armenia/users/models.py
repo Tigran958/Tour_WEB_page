@@ -57,7 +57,7 @@ class Driver(models.Model):
 
 class CarImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
-    image = models.ForeignKey(Driver, on_delete=models.CASCADE)
+    image = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='aa')
 
 
 class Guide(models.Model):
