@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from .forms import CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
 from .models import User, Driver, CarImageModel, Guide, TourAgents
+from .filters import DriverFilter
 
 
 def home(request):
@@ -55,12 +56,25 @@ def client_page(request):
     return render(request, 'users/client_page.html')
 
 def driver_list(request):
-    drivers = Driver.objects.all().prefetch_related("aa")
-    print(drivers[0].aa.__dict__)
 
-    context = {'drivers':drivers}
+
+    drivers = Driver.objects.all().prefetch_related("aa")
+    # print(drivers[0].aa.__dict__)
+    driver_filter = DriverFilter(request.GET, queryset=drivers)
+    
+    name = request.GET['DriverSearch']
+
+    if name:
+        drivers = driver_filter.qs.filter(user__name=name)
+    else:
+        drivers = driver_filter.qs
+
+    context = {'drivers':drivers, 'driver_filter': driver_filter} 
+         
 
     return render(request, 'users/driver_list.html', context)
+
+
 
 def guide_list(request):
     guides = Guide.objects.all()
@@ -83,3 +97,11 @@ def login_1(request):
 def u_logout(request):
     logout(request)
     return redirect('/sign/up/client_page')
+
+
+def driver_search(request):
+
+    if request.method == 'POST':
+        print(request__dict__)
+
+    return render(request, 'users/driver_search.html')     

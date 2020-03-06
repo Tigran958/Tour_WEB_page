@@ -1,5 +1,17 @@
 <h1>driver list</h1>
 
+<div>
+    <form method="GET">
+      
+      <input type="text" name="DriverSearch" placeholder="type something...">
+      {{ driver_filter.form }}
+      	
+      <button type="submit" name="search">Search</button>
+      
+    </form>
+  </div>
+
+
 {% for i in drivers %}
 <h3>Driver</h3>
 <li>
