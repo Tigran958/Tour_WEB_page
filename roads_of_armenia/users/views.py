@@ -5,13 +5,10 @@ from django.urls import reverse
 
 from .forms import CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
 from .models import User, Driver, CarImageModel, Guide, TourAgents
-<<<<<<< HEAD
-from .filters import DriverFilter, TourAgentsFilter, GuideFilter
-from django.db.models.functions import Substr
-=======
-from .filters import DriverFilter
 
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
+from .filters import DriverFilter, TourAgentsFilter, GuideFilter
+
+
 
 def home(request):
     return render(request, 'users/reg_home.html')
@@ -22,9 +19,6 @@ class UserSignUpView(CreateView):
     form_class = CustomUserForm
     template_name = 'users/signup.html'
 
-    # def get_context_data(self, **kwargs):
-    #     kwargs['user_type'] = 'driver'
-    #     return super().get_context_data(**kwargs)
     def get_context_data(self, **kwargs):
         filter_key = self.kwargs['key']
         filter_dict = {'1':CollectionTitleFormSet, '2': CollectionTitleFormSetClient,
@@ -62,15 +56,11 @@ def client_page(request):
 
 def driver_list(request):
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
     drivers = Driver.objects.all().prefetch_related("aa")
     # print(drivers[0].aa.__dict__)
     driver_filter = DriverFilter(request.GET, queryset=drivers)
     
-<<<<<<< HEAD
+
     try:
         name = request.GET['DriverSearch']
     except:
@@ -81,26 +71,16 @@ def driver_list(request):
     else:
         drivers = driver_filter.qs
 
-    if not drivers.exists():
-        print(drivers) 
-        # print(request.GET.__dict__)     
-        drivers = Driver.objects.all().prefetch_related("aa")
-        print(drivers)
+    # if not drivers.exists():
+        
+    #     # print(request.GET.__dict__)     
+    #     drivers = Driver.objects.all().prefetch_related("aa")
+    #     print(drivers)
 
     #TODO There can be used __range
     
     context = {'drivers':drivers, 'driver_filter': driver_filter}
-=======
-    name = request.GET['DriverSearch']
 
-    if name:
-        drivers = driver_filter.qs.filter(user__name=name)
-    else:
-        drivers = driver_filter.qs
-
-    context = {'drivers':drivers, 'driver_filter': driver_filter} 
-         
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
 
     return render(request, 'users/driver_list.html', context)
 
@@ -109,7 +89,7 @@ def driver_list(request):
 def guide_list(request):
     guides = Guide.objects.all()
 
-<<<<<<< HEAD
+
     guide_filter = GuideFilter(request.GET, queryset=guides)
     
     try:
@@ -126,16 +106,14 @@ def guide_list(request):
 
 
     context = {'guides':guides, 'guide_filter':guide_filter}
-=======
-    context = {'guides':guides}
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
+
 
     return render(request, 'users/guide_list.html', context)  
 
 def agent_list(request):
     agents = TourAgents.objects.all()
 
-<<<<<<< HEAD
+
     agent_filter = TourAgentsFilter(request.GET, queryset=agents)
     
 
@@ -154,13 +132,23 @@ def agent_list(request):
 
 
     if name:
-        agents = agent_filter.qs.filter(user__name__contains=F"{name}", 
-                                        # date_of_tour__range=(date_start,date_end),
-                                        )
+        agents = agent_filter.qs.filter(user__name__contains=F"{name}",)
+                                        
     else:
         agents = agent_filter.qs
-     
-                                        # first_to_ten_price__range=(price_start,price_to)
+
+    if date_start and date_end:
+        print(1)
+        agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
+    # elif price_start and not price_to:
+    #     date_end = date("2100-01-01")
+    #     agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
+    # else:
+    #     date_start = date("2100-01-01")
+    #     agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
+
+    # def func_if_2_args(x,y):
+    #     pass
     # if not agents.exists(): 
     #     # print(request.GET.__dict__)     
     #     agents = TourAgents.objects.all()
@@ -169,19 +157,17 @@ def agent_list(request):
 
     context = {'agents':agents, 'agent_filter': agent_filter} 
 
-=======
-    context = {'agents':agents}
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
+
 
     return render(request, 'users/agents_list.html', context)  
 
 
 def login_1(request):
-    return redirect('up/client_page')
+    return redirect('/client_page')
 
 def u_logout(request):
     logout(request)
-    return redirect('/sign/up/client_page')
+    return redirect('/client_page')
 
 
 def driver_search(request):

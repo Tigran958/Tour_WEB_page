@@ -7,7 +7,6 @@ class DriverFilter(django_filters.FilterSet):
 		model = Driver
 		fields = '__all__'
 
-<<<<<<< HEAD
 class TourAgentsFilter(django_filters.FilterSet):
 	class Meta:
 		model = TourAgents
@@ -18,5 +17,4 @@ class GuideFilter(django_filters.FilterSet):
 	class Meta:
 		model = Guide
 		fields = '__all__'
-=======
->>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
+
