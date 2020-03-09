@@ -1,6 +1,8 @@
 {%load static%}
 <h1>Hello world!!</h1>
+
 {% with a=1 b=2 c=3 d=4  %}
+
 <a  type="button" href="{% url 'up' a %}">Driver</a>
 <a  type="button" href="{% url 'up' b %}">Client</a>
 <a  type="button" href="{% url 'up' c %}">Guid</a>

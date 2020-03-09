@@ -1,0 +1,45 @@
+<h1>driver list</h1>
+
+<div>
+    <form method="GET">
+      
+      <input type="text" name="DriverSearch" placeholder="type something...">
+      {{ driver_filter.form }}
+      	
+      <button type="submit" name="search">Search</button>
+      
+    </form>
+  </div>
+
+
+{% for i in drivers %}
+<h3>Driver</h3>
+<li>
+	bank account: {{i.user.bank_account}}
+</li>
+
+<li>
+	Name: {{i.user.name}}
+</li>
+
+<li>
+	Phone number:{{i.user.phone_number}}
+</li>
+<br>
+<li>
+	Car model: {{ i.get_car_display }}
+</li>
+<li>
+	Production Year:{{ i.get_production_year_display }}
+</li>
+
+<li>
+	Car Seats: {{ i.seats }}
+</li>
+
+<li>
+	Price per KM: {{ i.price_per_km }}
+</li>
+<br>
+<br>
+{% endfor %}

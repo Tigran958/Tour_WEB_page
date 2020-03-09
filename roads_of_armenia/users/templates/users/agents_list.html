@@ -1,0 +1,62 @@
+<h1>Tour Agents</h1>
+
+<div>
+    <form method="GET">
+      <li>
+      <input type="text" name="AgentSearch" placeholder="type something...">
+      </li>
+      <li>
+      <input type="date" name="DateStart" placeholder="type something...">
+      </li>
+      <li>
+      <input type="date" name="DateEnd" placeholder="type something...">
+      </li>
+      <li>
+      <input type="number" name="PriceStart" placeholder="type something...">
+      </li>
+      <li>
+      <input type="number" name="PriceTo" placeholder="type something...">
+      </li>
+      {{ agent_filter.form }}
+      	
+      <button type="submit" name="search">Search</button>
+      
+    </form>
+</div>
+
+
+{% for i in agents %}
+<h2>Tour Agent</h2>
+<li>
+	bank account: {{i.user.bank_account}}
+</li>
+
+<li>
+	Name: {{i.user.name}}
+</li>
+
+<li>
+	Phone number:{{i.user.phone_number}}
+</li>
+
+<li>
+	Language: {{i.get_language_display }}
+</li>
+<li>
+	About agent: {{i.about_me}}
+</li>
+<li>
+	Tour type: {{ i.get_tour_type_display }}
+</li>
+<li>
+	Price :{{i.first_to_ten_price}}
+</li>
+
+<li>
+	Date of tour : {{i.date_of_tour }}
+</li>
+<br>
+<br>
+<br>
+
+{% endfor %}

@@ -36,7 +36,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username', ]
 
     def __str__(self):
-        return "{}".format(self.email)
+        return "{}".format(self.name)
 
 
 class Client(models.Model):
@@ -57,7 +57,7 @@ class Driver(models.Model):
 
 class CarImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
-    image = models.ForeignKey(Driver, on_delete=models.CASCADE)
+    image = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='aa')
 
 
 class Guide(models.Model):
@@ -82,7 +82,9 @@ class TourAgents(models.Model):
     language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
     tour_type = models.IntegerField(_('tour_type'), choices=TOUR_CHOICES)
-
+    location = models.CharField(max_length=255)    
+    first_to_ten_price = models.IntegerField(default=0)
+    date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
 
 class TourAgentsImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
