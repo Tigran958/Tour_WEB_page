@@ -5,8 +5,13 @@ from django.urls import reverse
 
 from .forms import CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
 from .models import User, Driver, CarImageModel, Guide, TourAgents
+<<<<<<< HEAD
 from .filters import DriverFilter, TourAgentsFilter, GuideFilter
 from django.db.models.functions import Substr
+=======
+from .filters import DriverFilter
+
+>>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
 
 def home(request):
     return render(request, 'users/reg_home.html')
@@ -57,10 +62,15 @@ def client_page(request):
 
 def driver_list(request):
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
     drivers = Driver.objects.all().prefetch_related("aa")
     # print(drivers[0].aa.__dict__)
     driver_filter = DriverFilter(request.GET, queryset=drivers)
     
+<<<<<<< HEAD
     try:
         name = request.GET['DriverSearch']
     except:
@@ -80,6 +90,17 @@ def driver_list(request):
     #TODO There can be used __range
     
     context = {'drivers':drivers, 'driver_filter': driver_filter}
+=======
+    name = request.GET['DriverSearch']
+
+    if name:
+        drivers = driver_filter.qs.filter(user__name=name)
+    else:
+        drivers = driver_filter.qs
+
+    context = {'drivers':drivers, 'driver_filter': driver_filter} 
+         
+>>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
 
     return render(request, 'users/driver_list.html', context)
 
@@ -88,6 +109,7 @@ def driver_list(request):
 def guide_list(request):
     guides = Guide.objects.all()
 
+<<<<<<< HEAD
     guide_filter = GuideFilter(request.GET, queryset=guides)
     
     try:
@@ -104,12 +126,16 @@ def guide_list(request):
 
 
     context = {'guides':guides, 'guide_filter':guide_filter}
+=======
+    context = {'guides':guides}
+>>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
 
     return render(request, 'users/guide_list.html', context)  
 
 def agent_list(request):
     agents = TourAgents.objects.all()
 
+<<<<<<< HEAD
     agent_filter = TourAgentsFilter(request.GET, queryset=agents)
     
 
@@ -143,6 +169,9 @@ def agent_list(request):
 
     context = {'agents':agents, 'agent_filter': agent_filter} 
 
+=======
+    context = {'agents':agents}
+>>>>>>> 35feef372f96249c469cc6f81008ce235f98bae1
 
     return render(request, 'users/agents_list.html', context)  
 
