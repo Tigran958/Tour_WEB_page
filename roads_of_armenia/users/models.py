@@ -82,11 +82,11 @@ class TourAgents(models.Model):
     language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
     tour_type = models.IntegerField(_('tour_type'), choices=TOUR_CHOICES)
-    location = models.CharField(max_length=255)    
+    location = models.CharField(max_length=255)
+
+class Tour(models.Model):
+    mainimage = models.ImageField(upload_to='img', null=True)
+    tour = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
     first_to_ten_price = models.IntegerField(default=0)
     date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
-    quantity = models.IntegerField()
-
-class TourAgentsImageModel(models.Model):
-    mainimage = models.ImageField(upload_to='img', null=True)
-    image = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
