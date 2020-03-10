@@ -7,7 +7,7 @@ from .forms import CollectionTitleFormSet, CustomUserForm , CollectionTitleFormS
 from .models import User, Driver, CarImageModel, Guide, TourAgents
 
 from .filters import DriverFilter, TourAgentsFilter, GuideFilter
-
+import datetime
 
 
 def home(request):
@@ -71,11 +71,11 @@ def driver_list(request):
     else:
         drivers = driver_filter.qs
 
-    # if not drivers.exists():
+    if not drivers.exists():
         
-    #     # print(request.GET.__dict__)     
-    #     drivers = Driver.objects.all().prefetch_related("aa")
-    #     print(drivers)
+        # print(request.GET.__dict__)     
+        drivers = Driver.objects.all().prefetch_related("aa")
+        # print(drivers)
 
     #TODO There can be used __range
     
@@ -121,7 +121,7 @@ def agent_list(request):
         try:
             name = request.GET[key]
         except:
-            name = {key:[]}
+            name = False
         return name
 
     name = func_valid_input('AgentSearch')
@@ -129,26 +129,54 @@ def agent_list(request):
     price_to = func_valid_input('PriceTo')    
     date_start = func_valid_input('DateStart')   
     date_end = func_valid_input('DateEnd')   
+    quantity = func_valid_input('Quantity')
 
+    agents = agent_filter.qs
 
+#########_______________ FIlter Name________________ #############
     if name:
         agents = agent_filter.qs.filter(user__name__contains=F"{name}",)
-                                        
-    else:
-        agents = agent_filter.qs
+
+    # print(1,date_start,date_end)
+
+#########_______________ FIlter Date range________________ #############
 
     if date_start and date_end:
-        print(1)
-        agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
-    # elif price_start and not price_to:
-    #     date_end = date("2100-01-01")
-    #     agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
-    # else:
-    #     date_start = date("2100-01-01")
-    #     agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
+        print(2,date_start,date_end)
+    #     print(1,date_start,date_end)
+        agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),)
 
-    # def func_if_2_args(x,y):
-    #     pass
+    elif date_start and not date_end:
+        date_end = "2100-01-01"
+        print(3,date_start,date_end)
+        agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
+    elif not date_start and date_end:
+        date_start = str(datetime.date.today())
+        print(date_start)
+        agents = agent_filter.qs.filter(date_of_tour__range=(date_start,date_end),)
+
+
+#########_______________ FIlter price range________________ #############
+
+    if price_start and price_to:
+        print(2,price_start,price_to)
+    #     print(1,price_start,price_to)
+        agents = agents.filter(first_to_ten_price__range=(price_start,price_to),)
+
+    elif price_start and not price_to:
+        price_to = 10000000000
+        print(3,price_start,price_to)
+        agents = agents.filter(first_to_ten_price__range=(price_start,price_to),) 
+    elif not price_start and price_to:
+        price_start = 0
+        agents = agents.filter(first_to_ten_price__range=(price_start,price_to),)
+
+#########_______________ FIlter quantity ________________ #############
+    if quantity:
+        quantity = int(quantity)
+        agents = agent_filter.qs.filter(quantity=quantity,)
+        
+
     # if not agents.exists(): 
     #     # print(request.GET.__dict__)     
     #     agents = TourAgents.objects.all()
@@ -156,8 +184,6 @@ def agent_list(request):
 
 
     context = {'agents':agents, 'agent_filter': agent_filter} 
-
-
 
     return render(request, 'users/agents_list.html', context)  
 

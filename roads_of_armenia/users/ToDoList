@@ -1,0 +1,3 @@
+update models.TourAgents
+update models.TourImage to Tour 
+create imagelist table 

@@ -85,6 +85,7 @@ class TourAgents(models.Model):
     location = models.CharField(max_length=255)    
     first_to_ten_price = models.IntegerField(default=0)
     date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
+    quantity = models.IntegerField()
 
 class TourAgentsImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
