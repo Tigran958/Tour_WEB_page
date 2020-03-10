@@ -319,7 +319,7 @@ def tour_agent_page(request):
         if form.is_valid():
             form.save()
 
-            return redirect('tour_agent_page.html')
+            return redirect('tour_agent_page')
     else:
         form = TourCreationForm()
 

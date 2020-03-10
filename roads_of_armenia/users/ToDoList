@@ -1,4 +1,4 @@
-update models.TourAgents
-update models.TourImage to Tour 
+update models.TourAgents- done
+update models.TourImage to Tour-done
 create imagelist table 
-change login system to a common function
+change login system to a common function -- was done, but there are something to do
