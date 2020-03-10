@@ -18,3 +18,11 @@ class GuideFilter(django_filters.FilterSet):
 		model = Guide
 		fields = '__all__'
 
+
+class TourFilter(django_filters.FilterSet):
+	class Meta:
+		model = Tour
+		fields = '__all__'
+		exclude = ('date_of_tour','first_to_ten_price','mainimage',)
+
+

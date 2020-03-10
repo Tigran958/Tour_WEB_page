@@ -11,10 +11,17 @@
 
         <label for="psw"><b>Password</b></label>
 
-        {{ form.password }}
+        {{ form.password }}     
 
-        <button name="submit" value="username,password" type="submit">Login</button>
-
+        {{ form.user_choices }}   
+        {% with a=1 b=2 c=3 d=4  %}
+        
+        
+        <button name="submit" value="username,password,a" type="submit" >Login as</button>
+        <button name="submit" value="username,password" type="submit">Login as1</button>
+        <button name="submit" value="username,password" type="submit">Login as1</button>
+        <button name="submit" value="username,password" type="submit">Login as1</button>
+        {% endwith %}
       </div>
     </form>
   </div>
