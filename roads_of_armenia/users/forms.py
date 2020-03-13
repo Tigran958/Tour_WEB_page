@@ -4,19 +4,14 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
-
-USER_CHOICES = (
-    (1, _("Driver")),
-    (2, _("Client")),
-    (3, _("Guide")),
-    (4, _("TourAgents"))
-)
+from .choices import USER_CHOICES
 
 class CustomUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'bank_account', 'name', 'phone_number']
+        fields = ['username', 'email', 'bank_account', 'name', 'phone_number','user_choices']
+        widgets = {'user_choices': forms.HiddenInput()}
 
 
 class DriverUserCreationForm(ModelForm):
@@ -80,6 +75,6 @@ class TourCreationForm(ModelForm):
 class LoginForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username',]
+        fields = ['username','user_choices',]
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
-    user_choices = forms.ChoiceField(choices = USER_CHOICES, required=True)
+    # user_choices = forms.ChoiceField(choices = USER_CHOICES, required=True)

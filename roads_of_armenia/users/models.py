@@ -3,22 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 import datetime
-
-CAR_CHOICES = (
-    (1, _("BMW")),
-    (2, _("Mercedes Benz"))
-)
-
-LANGUAGES_CHOICES = (
-    (1, _("Armenian")),
-    (2, _("English")),
-    (3, _("France")),
-    (4, _("Russian")),
-)
-
-TOUR_CHOICES = (
-    (1, _("Extreme")),
-)
+from .choices import *
 
 
 def year_choices():
@@ -31,7 +16,7 @@ class User(AbstractUser):
     bank_account = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=30)
-
+    user_choices = models.IntegerField(choices=USER_CHOICES, default=1)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
@@ -49,7 +34,7 @@ class Client(models.Model):
 class Driver(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE, related_name='driver')
-    car = models.IntegerField(choices=CAR_CHOICES, default=1)
+    car = models.IntegerField(choices=CAR_CHOICES,)
     production_year = models.IntegerField(_('year'), choices=year_choices())
     seats = models.IntegerField()
     price_per_km = models.IntegerField()
@@ -85,8 +70,12 @@ class TourAgents(models.Model):
     location = models.CharField(max_length=255)
 
 class Tour(models.Model):
-    mainimage = models.ImageField(upload_to='img', null=True, blank=True)
+    # mainimage = models.ImageField(upload_to='img', null=True, blank=True)
     tour = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
     first_to_ten_price = models.IntegerField(default=0)
     date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
     quantity = models.IntegerField(default=0)
+
+class TourImage(models.Model):
+    mainimage = models.ImageField(upload_to='img', null=True, blank=True)
+    image = models.ForeignKey(Tour, on_delete=models.CASCADE)

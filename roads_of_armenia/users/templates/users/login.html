@@ -5,21 +5,21 @@
       <div class="form_container">
         <p class="form_title">Login Form</p>
         
-        <label for="uname"><b>Username</b></label>
+        <label for="uname"><b>Email</b></label>
 
         {{ form.username }}
 
-        <label for="psw"><b>Password</b></label>
+        <label for="psw" type = 'password'><b>Password</b></label>
 
         {{ form.password }}     
-
+        <label for="chs" ><b>User Choices</b></label>
         {{ form.user_choices }}   
-        {% with a=1 b=2 c=3 d=4  %}
+        
         
         
         <button name="submit" value="username,password" type="submit" >Login as</button>
         
-        {% endwith %}
+        
       </div>
     </form>
   </div>
