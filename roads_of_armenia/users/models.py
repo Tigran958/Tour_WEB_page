@@ -62,6 +62,7 @@ class GuideImageModel(models.Model):
 
 
 class TourAgents(models.Model):
+    name = location = models.CharField(max_length=255)
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE, related_name='touragents')    
     language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
@@ -69,13 +70,23 @@ class TourAgents(models.Model):
     tour_type = models.IntegerField(_('tour_type'), choices=TOUR_CHOICES)
     location = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 class Tour(models.Model):
+    name = models.CharField(max_length=255)
     # mainimage = models.ImageField(upload_to='img', null=True, blank=True)
     tour = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
     first_to_ten_price = models.IntegerField(default=0)
     date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
     quantity = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return self.name
 
 class TourImage(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True, blank=True)
     image = models.ForeignKey(Tour, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.tour.name

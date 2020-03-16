@@ -1,12 +1,11 @@
 <h1> Tour agents page </h1>
-<div>
-	<form action="" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-
-
-      <button type="submit" name="Create">Create</button>
-
-      
-    </form>
-</div>
+<form action="/pic_upload/{{request.user.id}}/" method="post" enctype="multipart/form-data"> 
+    {% csrf_token %}
+    {{ form.as_p }} 
+    <table>
+      <tr>
+        <td>Select Pictures: </td><td><input name="files" type="file" size="50" accept="image/*" multiple>  </td>
+        <td><button type="submit"> Upload </button> </td>
+       </tr>
+    </table>
+</form>

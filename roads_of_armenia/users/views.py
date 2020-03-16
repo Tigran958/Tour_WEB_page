@@ -6,7 +6,7 @@ from django.views.generic import CreateView
 from django.urls import reverse
 
 from .forms import * # CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
-from .models import User, Driver, CarImageModel, Guide, TourAgents, Tour
+from .models import User, Driver, CarImageModel, Guide, TourAgents, Tour, TourImage
 
 from .filters import DriverFilter, TourAgentsFilter, GuideFilter, TourFilter
 import datetime
@@ -251,36 +251,64 @@ def tour_list(request):
 
     return render(request, 'users/tour_list.html', context)  
 
+@login_required
 def tour_agent_page(request):
     if request.method == "POST":
         form = TourCreationForm(request.POST)
         if form.is_valid():
             form.save()
-
-            return redirect('tour_agent_page')
+            image = Tour.objects.get(image__id=image_id)
+            for afile in request.FILES.getlist('files'):
+                pic = Picture()
+                pic.image= image 
+                pic.image = afile
+                pic.save()
+            return redirect('tour_agent_page') 
+            
     else:
         form = TourCreationForm()
 
     return render(request, 'users/tour_agent_page.html', {"form": form})
 
-# @login_required
-# def pic_upload(request,image_id=1):
-#     if request.method == "POST":
-#         form = TourCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
+@login_required
+def pic_upload(request,image_id=1):
+    if request.method == "POST":
+        form = TourCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            c = User.objects.all()
+            for i in c:
+                print(i.id)
+            b = TourAgents.objects.all().filter(user_id=image_id)
+            # for i in b:
+            #     print(i.id, i.user_id)
+            # print('this is as ', b.__dict__)
+            f=b[0]
+            print(f.id)
+            # for i in f:
+            #     print(i)
 
-#             image = Tour.objects.get(image__id=image_id)
-#             for afile in request.FILES.getlist('files'):
-#                 pic = Picture()
-#                 pic.image= image 
-#                 pic.image = afile
-#                 pic.save()
-#             return redirect('tour_agent_page') 
-#     else:
-#     form = TourCreationForm()
 
-#     return render(request, 'users/tour_agent_page.html', {"form": form})
+            a = Tour.objects.all().filter(tour_id=f.id)
+            print('this is for tour')
+            print(a[1].id, a[1].tour_id)
+            print(a.last())
+            image = a.last()
+            print(image)
+            
+            for afile in request.FILES.getlist('files'):
+                # pic = Picture()
+                print(afile)
+                tourimage = TourImage.objects.create(image=image,mainimage=afile)
+                # pic.image= image 
+                # pic.image = afile
+                # pic.save()
+                print('ok')
+            return redirect('tour_agent_page') 
+    else:
+        form = TourCreationForm()
+
+    return render(request, 'users/tour_agent_page.html', {"form": form})
 
 def login_0(request):
     if request.method == 'POST':

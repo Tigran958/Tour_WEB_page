@@ -14,7 +14,7 @@ urlpatterns = [
     path('agent_list', views.agent_list, name='agent_list'),
     path('tour_list', views.tour_list, name='tour_list'),
 
-    # path('pic_upload/<int:image_id>)', views.pic_upload, name='pic_upload'),
+    path('pic_upload/<int:image_id>/', views.pic_upload, name='pic_upload'),
     # path('in/', LoginView.as_view(template_name='users/login.html'), name='login'),
     path('in/', views.login_0, name='login'),
     path('accounts/profile/<int:key>',views.login_1, name='login_1'),
