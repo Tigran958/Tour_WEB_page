@@ -89,4 +89,4 @@ class TourImage(models.Model):
     image = models.ForeignKey(Tour, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.tour.name
+        return self.tour.name 

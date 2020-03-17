@@ -283,6 +283,7 @@ def pic_upload(request,image_id=1):
             # for i in b:
             #     print(i.id, i.user_id)
             # print('this is as ', b.__dict__)
+            print(b)
             f=b[0]
             print(f.id)
             # for i in f:
@@ -291,7 +292,7 @@ def pic_upload(request,image_id=1):
 
             a = Tour.objects.all().filter(tour_id=f.id)
             print('this is for tour')
-            print(a[1].id, a[1].tour_id)
+            # print(a[1].id, a[1].tour_id)
             print(a.last())
             image = a.last()
             print(image)
@@ -307,7 +308,38 @@ def pic_upload(request,image_id=1):
             return redirect('tour_agent_page') 
     else:
         form = TourCreationForm()
+# ############ test wich doestn't work yet
+#     c = User.objects.all()
+#     for i in c:
+#         print(i.id)
+#     b = TourAgents.objects.all().filter(user_id=image_id)
+#     # for i in b:
+#     #     print(i.id, i.user_id)
+#     # print('this is as ', b.__dict__)
+#     print(b)
+#     f=b[0]
+#     print(f.id)
+#     # for i in f:
+#     #     print(i)
 
+
+#     a = Tour.objects.all().filter(tour_id=f.id)
+#     print('this is for tour')
+#     # print(a[1].id, a[1].tour_id)
+#     print(a.last())
+#     image = a.last()
+#     print(image)
+# ###########
+#     tour = Tour.objects.get(pk=f.id)
+#     TourImageInlineFormSet = inlineformset_factory(Tour, TourImage, fields=('mainimage',))
+#     if request.method == "POST":
+#         formset = ImageImageFormSet(request.POST, request.FILES, instance=tour)
+#         if formset.is_valid():
+#             formset.save()
+#             return redirect('tour_agent_page')
+#     else:
+#         formset = TourImageFormSet(instance=tour)
+    # return render(request, 'users/tour_agent_page.html', {"formset": formset})
     return render(request, 'users/tour_agent_page.html', {"form": form})
 
 def login_0(request):

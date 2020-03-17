@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Driver, Guide, Client, TourAgents, Tour
+from .models import User, Driver, Guide, Client, TourAgents, Tour, TourImage
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import inlineformset_factory
 from django.forms import ModelForm
@@ -78,3 +78,8 @@ class LoginForm(ModelForm):
         fields = ['username','user_choices',]
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     # user_choices = forms.ChoiceField(choices = USER_CHOICES, required=True)
+
+# TourImageFormset = inlineformset_factory(Tour, TourImage, fields=('mainimage',))
+# tour = Tour.objects.get(id=1)
+# formset = TourImageFormSet(instance=tour)
+
