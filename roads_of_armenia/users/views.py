@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import CreateView
 from django.urls import reverse
 
-from .forms import * # CollectionTitleFormSet, CustomUserForm , CollectionTitleFormSetClient, CollectionTitleFormSetGuide, CollectionTitleFormSetTourAgents 
+from .forms import * 
 from .models import User, Driver, CarImageModel, Guide, TourAgents, Tour, TourImage
 
 from .filters import DriverFilter, TourAgentsFilter, GuideFilter, TourFilter
@@ -27,14 +27,11 @@ class UserSignUpView(CreateView):
                         '3': CollectionTitleFormSetGuide, '4': CollectionTitleFormSetTourAgents
                     }
         user_coll_type = filter_dict[str(filter_key)]
-
+        ###__________function for formset choice________###
         def filter_type(TitleFormSet,key):  
             data = super(UserSignUpView, self).get_context_data(**kwargs)
             if self.request.POST:
                 data['titles'] = TitleFormSet(self.request.POST)
-                # print(data['titles'])
-                # data['form'].fields['user_choices'].initial = key
-                # print(data['form'].fields['user_choices'].initial)
             else:
                 data['titles'] = TitleFormSet()
                 data['form'].fields['user_choices'].initial = key
@@ -47,12 +44,10 @@ class UserSignUpView(CreateView):
     def form_valid(self, form):
         
         context = self.get_context_data()
-        # context['form'].fields['user_choices'].initial = 4
         titles = context["titles"]
 
         self.object = form.save()
         user_choices = form.cleaned_data.get('user_choices')
-        # print(user_choices)
 
         if titles.is_valid():
             titles.instance = self.object
@@ -63,9 +58,10 @@ class UserSignUpView(CreateView):
             ####_______here must be checked if such kind of user exists_____#######
             self.user = authenticate(username=self.username,password=self.password)
             
-            if self.user.is_authenticated():
+            if self.user is not None:
                 login(self.request,self.user)
-
+            else: 
+                print("something's gone wrong", self.password, self.username )
 
         return super().form_valid(form)
     # @login_required    
@@ -74,8 +70,6 @@ class UserSignUpView(CreateView):
                             '3': '/client_page', '4': '/tour_agent_page'
                             }
         url = url_dict[str(self.kwargs['key'])]
-        # print(self.request.)
-
 
         return url
 
@@ -83,11 +77,13 @@ def client_page(request):
     return render(request, 'users/client_page.html')
 
 def tour_agent_page(request):
-
-    agent = TourAgents.objects.get(user__id=request.user.id) 
-    tour = Tour.objects.all().filter(tour__id=agent.id)
-    context = {'tour':tour}
-
+    if request.user.is_authenticated:
+        agent = TourAgents.objects.get(user__id=request.user.id) 
+        tour = Tour.objects.all().filter(tour__id=agent.id)
+        context = {'tour':tour}
+    else:
+        tour = Tour.objects.all()
+        context = {'tour':tour}
     return render(request, 'users/tour_agent.html', context)
 
 
@@ -207,18 +203,14 @@ def tour_list(request):
     if name:
         tours = tour_filter.qs.filter(user__name__contains=F"{name}",)
 
-    # print(1,date_start,date_end)
 
 #########_______________ FIlter Date range________________ #############
 
     if date_start and date_end:
-        print(2,date_start,date_end)
-    #     print(1,date_start,date_end)
         tours = tour_filter.qs.filter(date_of_tour__range=(date_start,date_end),)
 
     elif date_start and not date_end:
         date_end = "2100-01-01"
-        print(3,date_start,date_end)
         tours = tour_filter.qs.filter(date_of_tour__range=(date_start,date_end),) 
     elif not date_start and date_end:
         date_start = str(datetime.date.today())
@@ -229,13 +221,10 @@ def tour_list(request):
 #########_______________ FIlter price range________________ #############
 
     if price_start and price_to:
-        print(2,price_start,price_to)
-    #     print(1,price_start,price_to)
         tours = tours.filter(first_to_ten_price__range=(price_start,price_to),)
 
     elif price_start and not price_to:
         price_to = 10000000000
-        print(3,price_start,price_to)
         tours = tours.filter(first_to_ten_price__range=(price_start,price_to),) 
     elif not price_start and price_to:
         price_start = 0
@@ -255,95 +244,23 @@ def tour_list(request):
 
     return render(request, 'users/tour_list.html', context)  
 
-# @login_required
-# def tour_agent_page(request):
-#     if request.method == "POST":
-#         form = TourCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             image = Tour.objects.get(image__id=image_id)
-#             for afile in request.FILES.getlist('files'):
-#                 pic = Picture()
-#                 pic.image= image 
-#                 pic.image = afile
-#                 pic.save()
-#             return redirect('tour_agent_page') 
-            
-#     else:
-#         form = TourCreationForm()
-
-#     return render(request, 'users/tour_agent_page.html', {"form": form})
 
 @login_required
-def pic_upload(request,image_id=1):
+def pic_upload(request,user_id=1):
     if request.method == "POST":
         form = TourCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            c = User.objects.all()
-            for i in c:
-                print(i.id)
-            b = TourAgents.objects.all().filter(user_id=image_id)
-            # for i in b:
-            #     print(i.id, i.user_id)
-            # print('this is as ', b.__dict__)
-            print(b)
-            f=b[0]
-            print(f.id)
-            # for i in f:
-            #     print(i)
-
-
-            a = Tour.objects.all().filter(tour_id=f.id)
-            print('this is for tour')
-            # print(a[1].id, a[1].tour_id)
-            print(a.last())
-            image = a.last()
-            print(image)
+            tour_agent = TourAgents.objects.get(user_id=user_id)
+            tour_obj = Tour.objects.all().filter(tour_id=tour_agent.id)
+            image = tour_obj.last()
             
             for afile in request.FILES.getlist('files'):
-                # pic = Picture()
-                print(afile)
                 tourimage = TourImage.objects.create(image=image,mainimage=afile)
-                # pic.image= image 
-                # pic.image = afile
-                # pic.save()
-                print('ok')
             return redirect('tour_agent_page') 
     else:
         form = TourCreationForm()
-# ############ test wich doestn't work yet
-#     c = User.objects.all()
-#     for i in c:
-#         print(i.id)
-#     b = TourAgents.objects.all().filter(user_id=image_id)
-#     # for i in b:
-#     #     print(i.id, i.user_id)
-#     # print('this is as ', b.__dict__)
-#     print(b)
-#     f=b[0]
-#     print(f.id)
-#     # for i in f:
-#     #     print(i)
 
-
-#     a = Tour.objects.all().filter(tour_id=f.id)
-#     print('this is for tour')
-#     # print(a[1].id, a[1].tour_id)
-#     print(a.last())
-#     image = a.last()
-#     print(image)
-# ###########
-#     tour = Tour.objects.get(pk=f.id)
-#     TourImageInlineFormSet = inlineformset_factory(Tour, TourImage, fields=('mainimage',))
-#     if request.method == "POST":
-#         formset = ImageImageFormSet(request.POST, request.FILES, instance=tour)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('tour_agent_page')
-#     else:
-#         formset = TourImageFormSet(instance=tour)
-    # return render(request, 'users/tour_agent_page.html', {"formset": formset})
     return render(request, 'users/tour_agent_page.html', {"form": form})
 
 def login_0(request):
@@ -354,15 +271,11 @@ def login_0(request):
             template_dict = {'1': '/tour_agent_page', '2': '/client_page',
                             '3': '/client_page', '4': '/tour_agent_page'
                             }
-            # print(form.cleaned_data['username'])
-            # print(form.cleaned_data['password'])
             key = form.cleaned_data['user_choices'] 
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            # print(username,password)
             ####_______here must be checked if such kind of user exists_____#######
             user = authenticate(username=username,password=password)
-            print(user)
 
             if user is not None:
                 if user.user_choices == key:
@@ -381,12 +294,7 @@ def login_0(request):
     return render(request,'users/login.html', {'form':form} )
 
 def login_1(request,key):
-    # print(key)
-    # print(request.GET.__dict__)
-    # print(request.POST.__dict__)
-    # template_dict = {'1': '/client_page', '2': '/client_page', '3': '/client_page', '4': '/tour_agent_page'}
-
-
+    
     return redirect('/client_page')
 
 def u_logout(request):
