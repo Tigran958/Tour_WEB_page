@@ -66,8 +66,8 @@ class UserSignUpView(CreateView):
         return super().form_valid(form)
     # @login_required    
     def get_success_url(self,**kwargs):
-        url_dict = {'1': '/tour_agent_page', '2': '/client_page',
-                            '3': '/client_page', '4': '/tour_agent_page'
+        url_dict = {'1': '/driver_list', '2': '/client_page',
+                            '3': '/guide_list', '4': '/tour_agent_page'
                             }
         url = url_dict[str(self.kwargs['key'])]
 
@@ -133,6 +133,8 @@ def guide_list(request):
     else:
         guides = guide_filter.qs
 
+    if not guides.exists():
+        guides = Guide.objects.all()
 
 
     context = {'guides':guides, 'guide_filter':guide_filter}
@@ -158,22 +160,12 @@ def agent_list(request):
 
     agents = agent_filter.qs
 
-    # if not agents.exists(): 
-    #     # print(request.GET.__dict__)     
-    #     agents = TourAgents.objects.all()
-
-
 
     context = {'agents':agents, 'agent_filter': agent_filter} 
 
     return render(request, 'users/agents_list.html', context)  
 
-def driver_search(request):
 
-    if request.method == 'POST':
-        print(request__dict__)
-
-    return render(request, 'users/driver_search.html')     
 
 def tour_list(request):
 
@@ -199,12 +191,12 @@ def tour_list(request):
 
     tours = tour_filter.qs
 
-#########_______________ FIlter Name________________ #############
+    #########_______________ FIlter Name________________ #############
     if name:
         tours = tour_filter.qs.filter(user__name__contains=F"{name}",)
 
 
-#########_______________ FIlter Date range________________ #############
+    #########_______________ FIlter Date range________________ #############
 
     if date_start and date_end:
         tours = tour_filter.qs.filter(date_of_tour__range=(date_start,date_end),)
@@ -218,7 +210,7 @@ def tour_list(request):
         tours = tour_filter.qs.filter(date_of_tour__range=(date_start,date_end),)
 
 
-#########_______________ FIlter price range________________ #############
+    #########_______________ FIlter price range________________ #############
 
     if price_start and price_to:
         tours = tours.filter(first_to_ten_price__range=(price_start,price_to),)
@@ -230,15 +222,12 @@ def tour_list(request):
         price_start = 0
         tours = tours.filter(first_to_ten_price__range=(price_start,price_to),)
 
-#########_______________ FIlter quantity ________________ #############
+    #########_______________ FIlter quantity ________________ #############
     if quantity:
         quantity = int(quantity)
         tours = tour_filter.qs.filter(quantity=quantity,)
         
 
-    # if not agents.exists(): 
-    #     # print(request.GET.__dict__)     
-    #     agents = TourAgents.objects.all()
 
     context = {'tours':tours, 'tour_filter': tour_filter} 
 
@@ -268,13 +257,12 @@ def login_0(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             
-            template_dict = {'1': '/tour_agent_page', '2': '/client_page',
-                            '3': '/client_page', '4': '/tour_agent_page'
+            template_dict = {'1': '/driver_list', '2': '/client_page',
+                            '3': '/guide_list', '4': '/tour_agent_page'
                             }
             key = form.cleaned_data['user_choices'] 
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            ####_______here must be checked if such kind of user exists_____#######
             user = authenticate(username=username,password=password)
 
             if user is not None:
@@ -293,9 +281,6 @@ def login_0(request):
 
     return render(request,'users/login.html', {'form':form} )
 
-def login_1(request,key):
-    
-    return redirect('/client_page')
 
 def u_logout(request):
     logout(request)

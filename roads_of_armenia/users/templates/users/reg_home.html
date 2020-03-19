@@ -5,11 +5,15 @@
 	<a  type="button" href="{% url 'login' %}">Login</a>
 </h2>
 
+
 {% with a=1 b=2 c=3 d=4  %}
-
-<a  type="button" href="{% url 'up' a %}">Driver</a>
-<a  type="button" href="{% url 'up' b %}">Client</a>
-<a  type="button" href="{% url 'up' c %}">Guid</a>
-<a  type="button" href="{% url 'up' d %}">TourAgent</a>
-
+<h2>
+<a  type="button" href="{% url 'up' a %}">Sign up as Driver</a>
+<br>
+<a  type="button" href="{% url 'up' b %}">Sign up as Client</a>
+<br>
+<a  type="button" href="{% url 'up' c %}">Sign up as Guid</a>
+<br>
+<a  type="button" href="{% url 'up' d %}">Sign up as TourAgent</a>
+</h2>
 {% endwith %}	
