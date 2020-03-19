@@ -1,0 +1,10 @@
+{% load static %}
+<h1> Tour agent home view</h1>
+
+{% for i in tour %}
+<li>
+	{{ i.name}}
+</li>	
+{% endfor %}
+
+<a href="{% url 'pic_upload' request.user.id %}" type="buttom"> new</a>

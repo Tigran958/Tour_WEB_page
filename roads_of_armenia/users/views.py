@@ -57,14 +57,14 @@ class UserSignUpView(CreateView):
         if titles.is_valid():
             titles.instance = self.object
             titles.save()
-        # self.username = form.cleaned_data['username']
-        # self.password = form.cleaned_data['password1']
-        # self.user_choices = form.cleaned_data.get('user_choices')
-        # ####_______here must be checked if such kind of user exists_____#######
-        # self.user = authenticate(self.request,username=self.username,password=self.password)
-        
-        # if self.user.is_authenticated():
-        #     login(self.request,self.user)
+            self.username = form.cleaned_data['username']
+            self.password = form.cleaned_data['password1']
+            self.user_choices = form.cleaned_data.get('user_choices')
+            ####_______here must be checked if such kind of user exists_____#######
+            self.user = authenticate(username=self.username,password=self.password)
+            
+            if self.user.is_authenticated():
+                login(self.request,self.user)
 
 
         return super().form_valid(form)
@@ -82,12 +82,19 @@ class UserSignUpView(CreateView):
 def client_page(request):
     return render(request, 'users/client_page.html')
 
+def tour_agent_page(request):
+
+    agent = TourAgents.objects.get(user__id=request.user.id) 
+    tour = Tour.objects.all().filter(tour__id=agent.id)
+    context = {'tour':tour}
+
+    return render(request, 'users/tour_agent.html', context)
 
 
 def driver_list(request):
 
     drivers = Driver.objects.all().prefetch_related("aa")
-    # print(drivers[0].aa.__dict__)
+
     driver_filter = DriverFilter(request.GET, queryset=drivers)
     
 
@@ -103,11 +110,9 @@ def driver_list(request):
 
     if not drivers.exists():
         
-        # print(request.GET.__dict__)     
+            
         drivers = Driver.objects.all().prefetch_related("aa")
-        # print(drivers)
-
-    #TODO There can be used __range
+        
     
     context = {'drivers':drivers, 'driver_filter': driver_filter}
 
@@ -132,7 +137,6 @@ def guide_list(request):
     else:
         guides = guide_filter.qs
 
-    # print(guide_filter.qs.__dict__)
 
 
     context = {'guides':guides, 'guide_filter':guide_filter}
@@ -251,24 +255,24 @@ def tour_list(request):
 
     return render(request, 'users/tour_list.html', context)  
 
-@login_required
-def tour_agent_page(request):
-    if request.method == "POST":
-        form = TourCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            image = Tour.objects.get(image__id=image_id)
-            for afile in request.FILES.getlist('files'):
-                pic = Picture()
-                pic.image= image 
-                pic.image = afile
-                pic.save()
-            return redirect('tour_agent_page') 
+# @login_required
+# def tour_agent_page(request):
+#     if request.method == "POST":
+#         form = TourCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             image = Tour.objects.get(image__id=image_id)
+#             for afile in request.FILES.getlist('files'):
+#                 pic = Picture()
+#                 pic.image= image 
+#                 pic.image = afile
+#                 pic.save()
+#             return redirect('tour_agent_page') 
             
-    else:
-        form = TourCreationForm()
+#     else:
+#         form = TourCreationForm()
 
-    return render(request, 'users/tour_agent_page.html', {"form": form})
+#     return render(request, 'users/tour_agent_page.html', {"form": form})
 
 @login_required
 def pic_upload(request,image_id=1):
