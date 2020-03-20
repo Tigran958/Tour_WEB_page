@@ -1,4 +1,4 @@
-<h1> Tour agents page </h1>
+<h1> Tour creation page </h1>
 <form action="/pic_upload/{{request.user.id}}/" method="post" enctype="multipart/form-data"> 
     {% csrf_token %}
     {{ form.as_p }} 

@@ -67,7 +67,7 @@ class UserSignUpView(CreateView):
     # @login_required    
     def get_success_url(self,**kwargs):
         url_dict = {'1': '/driver_list', '2': '/client_page',
-                            '3': '/guide_list', '4': '/tour_agent_page'
+                            '3': '/guide_list', '4': '/tour_creation'
                             }
         url = url_dict[str(self.kwargs['key'])]
 
@@ -76,7 +76,7 @@ class UserSignUpView(CreateView):
 def client_page(request):
     return render(request, 'users/client_page.html')
 
-def tour_agent_page(request):
+def tour_creation(request):
     if request.user.is_authenticated:
         agent = TourAgents.objects.get(user__id=request.user.id) 
         tour = Tour.objects.all().filter(tour__id=agent.id)
@@ -246,11 +246,11 @@ def pic_upload(request,user_id=1):
             
             for afile in request.FILES.getlist('files'):
                 tourimage = TourImage.objects.create(image=image,mainimage=afile)
-            return redirect('tour_agent_page') 
+            return redirect('tour_creation') 
     else:
         form = TourCreationForm()
 
-    return render(request, 'users/tour_agent_page.html', {"form": form})
+    return render(request, 'users/tour_creation.html', {"form": form})
 
 def login_0(request):
     if request.method == 'POST':
@@ -258,7 +258,7 @@ def login_0(request):
         if form.is_valid():
             
             template_dict = {'1': '/driver_list', '2': '/client_page',
-                            '3': '/guide_list', '4': '/tour_agent_page'
+                            '3': '/guide_list', '4': '/tour_creation'
                             }
             key = form.cleaned_data['user_choices'] 
             username = form.cleaned_data['username']
