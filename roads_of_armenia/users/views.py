@@ -49,41 +49,46 @@ class UserSignUpView(CreateView):
         self.object = form.save()
         user_choices = form.cleaned_data.get('user_choices')
 
-        if titles.is_valid():
+        if titles.is_valid(): 
             titles.instance = self.object
             titles.save()
-            self.username = form.cleaned_data['username']
+            valid = super().form_valid(form)
+            self.username = form.cleaned_data['email']
             self.password = form.cleaned_data['password1']
             self.user_choices = form.cleaned_data.get('user_choices')
             ####_______here must be checked if such kind of user exists_____#######
-            self.user = authenticate(username=self.username,password=self.password)
-            
+            self.user = authenticate(email=self.username,password=self.password)
+        
             if self.user is not None:
                 login(self.request,self.user)
+                print(self.user.is_authenticated)
+                print(self.request.user.id)
             else: 
                 print("something's gone wrong", self.password, self.username )
 
-        return super().form_valid(form)
+        return valid
     # @login_required    
     def get_success_url(self,**kwargs):
         url_dict = {'1': '/driver_list', '2': '/client_page',
                             '3': '/guide_list', '4': '/tour_creation'
                             }
         url = url_dict[str(self.kwargs['key'])]
-
+        # print(self.user.is_authenticated)
         return url
 
 def client_page(request):
     return render(request, 'users/client_page.html')
 
 def tour_creation(request):
+    print(request.user.id, request.user.is_authenticated)
     if request.user.is_authenticated:
+        print(request.user.id)
         agent = TourAgents.objects.get(user__id=request.user.id) 
         tour = Tour.objects.all().filter(tour__id=agent.id)
         context = {'tour':tour}
-    else:
-        tour = Tour.objects.all()
-        context = {'tour':tour}
+    # else:
+    #     tour = Tour.objects.all()
+    #     context = {'tour':tour}
     return render(request, 'users/tour_agent.html', context)
 
 
@@ -260,18 +265,16 @@ def login_0(request):
             template_dict = {'1': '/driver_list', '2': '/client_page',
                             '3': '/guide_list', '4': '/tour_creation'
                             }
-            key = form.cleaned_data['user_choices'] 
+            # key = form.cleaned_data['user_choices'] 
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(username=username,password=password)
 
             if user is not None:
-                if user.user_choices == key:
-                    login(request,user)
-                    template_0 = template_dict[str(key)]
-                    return redirect(template_0)
-                else:
-                    return HttpResponse("wrong user type")
+                
+                login(request,user)
+                template_0 = template_dict[str(user.user_choices)]
+                return redirect(template_0)
             else:
                 print(request.POST)
                 return HttpResponse("wrong login")

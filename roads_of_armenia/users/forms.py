@@ -75,7 +75,7 @@ class TourCreationForm(ModelForm):
 class LoginForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username','user_choices',]
+        fields = ['username',]
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
     # user_choices = forms.ChoiceField(choices = USER_CHOICES, required=True)
 
