@@ -61,10 +61,6 @@ class UserSignUpView(CreateView):
         
             if self.user is not None:
                 login(self.request,self.user)
-                print(self.user.is_authenticated)
-                print(self.request.user.id)
-            else: 
-                print("something's gone wrong", self.password, self.username )
 
         return valid
     # @login_required    
@@ -80,9 +76,7 @@ def client_page(request):
     return render(request, 'users/client_page.html')
 
 def tour_creation(request):
-    print(request.user.id, request.user.is_authenticated)
     if request.user.is_authenticated:
-        print(request.user.id)
         agent = TourAgents.objects.get(user__id=request.user.id) 
         tour = Tour.objects.all().filter(tour__id=agent.id)
         context = {'tour':tour}
@@ -91,35 +85,39 @@ def tour_creation(request):
     #     context = {'tour':tour}
     return render(request, 'users/tour_agent.html', context)
 
-
+@login_required
 def driver_list(request):
-
-    drivers = Driver.objects.all().prefetch_related("aa")
-
-    driver_filter = DriverFilter(request.GET, queryset=drivers)
-    
-
-    try:
-        name = request.GET['DriverSearch']
-    except:
-        name = {"DriverSearch":[]}
-
-    if name:
-        drivers = driver_filter.qs.filter(user__name__contains=F"{name}")
-    else:
-        drivers = driver_filter.qs
-
-    if not drivers.exists():
-        
-            
+    # print(request.user.user_choices)
+    if request.user.user_choices == 1:
         drivers = Driver.objects.all().prefetch_related("aa")
+
+        driver_filter = DriverFilter(request.GET, queryset=drivers)
         
+
+        try:
+            name = request.GET['DriverSearch']
+        except:
+            name = {"DriverSearch":[]}
+
+        if name:
+            drivers = driver_filter.qs.filter(user__name__contains=F"{name}")
+        else:
+            drivers = driver_filter.qs
+
+        if not drivers.exists():
+            
+                
+            drivers = Driver.objects.all().prefetch_related("aa")
+
+        context = {'drivers':drivers, 'driver_filter': driver_filter}
+
+
+        return render(request, 'users/driver_list.html', context)
+
+    else:
+        return redirect("in/")    
     
-    context = {'drivers':drivers, 'driver_filter': driver_filter}
-
-
-    return render(request, 'users/driver_list.html', context)
-
+    
 
 
 def guide_list(request):
