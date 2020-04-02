@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 import datetime
 from .choices import *
+from multiselectfield import MultiSelectField
 
 
 def year_choices():
@@ -56,6 +57,7 @@ class Guide(models.Model):
     location_based_price = models.IntegerField()
     gender = models.IntegerField(choices=GENDER_CHOICES)
     age = models.IntegerField(choices=AGE_CHOICES)
+    car_availability = models.BooleanField(default=False)
     
 
 
