@@ -54,6 +54,9 @@ class Guide(models.Model):
     ten_plus_one_price = models.IntegerField()
     location = models.CharField(max_length=255)
     location_based_price = models.IntegerField()
+    gender = models.IntegerField(choices=GENDER_CHOICES)
+    age = models.IntegerField(choices=AGE_CHOICES)
+    
 
 
 class GuideImageModel(models.Model):
