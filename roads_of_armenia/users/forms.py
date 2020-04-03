@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import inlineformset_factory
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
-from .choices import USER_CHOICES
+from .choices import USER_CHOICES, LANGUAGES_CHOICES
 
 class CustomUserForm(UserCreationForm):
 
@@ -77,9 +77,7 @@ class LoginForm(ModelForm):
         model = User
         fields = ['username',]
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
-    # user_choices = forms.ChoiceField(choices = USER_CHOICES, required=True)
 
-# TourImageFormset = inlineformset_factory(Tour, TourImage, fields=('mainimage',))
-# tour = Tour.objects.get(id=1)
-# formset = TourImageFormSet(instance=tour)
 
+class GuideLanguageForm(forms.Form):
+    language = forms.ChoiceField(choices=LANGUAGES_CHOICES)

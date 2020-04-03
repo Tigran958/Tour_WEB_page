@@ -12,6 +12,15 @@ from .filters import DriverFilter, TourAgentsFilter, GuideFilter, TourFilter
 import datetime
 
 
+def func_valid_input(key):
+    try:
+        name = request.GET[key]
+    except:
+        name = False
+    return name
+
+
+
 def home(request):
     return render(request, 'users/reg_home.html')
 
@@ -85,37 +94,37 @@ def tour_creation(request):
     #     context = {'tour':tour}
     return render(request, 'users/tour_agent.html', context)
 
-@login_required
+# @login_required
 def driver_list(request):
     # print(request.user.user_choices)
-    if request.user.user_choices == 1:
+    # if request.user.user_choices == 1:
+    drivers = Driver.objects.all().prefetch_related("aa")
+
+    driver_filter = DriverFilter(request.GET, queryset=drivers)
+    
+
+    try:
+        name = request.GET['DriverSearch']
+    except:
+        name = {"DriverSearch":[]}
+
+    if name:
+        drivers = driver_filter.qs.filter(user__name__contains=F"{name}")
+    else:
+        drivers = driver_filter.qs
+
+    if not drivers.exists():
+        
+            
         drivers = Driver.objects.all().prefetch_related("aa")
 
-        driver_filter = DriverFilter(request.GET, queryset=drivers)
-        
-
-        try:
-            name = request.GET['DriverSearch']
-        except:
-            name = {"DriverSearch":[]}
-
-        if name:
-            drivers = driver_filter.qs.filter(user__name__contains=F"{name}")
-        else:
-            drivers = driver_filter.qs
-
-        if not drivers.exists():
-            
-                
-            drivers = Driver.objects.all().prefetch_related("aa")
-
-        context = {'drivers':drivers, 'driver_filter': driver_filter}
+    context = {'drivers':drivers, 'driver_filter': driver_filter}
 
 
-        return render(request, 'users/driver_list.html', context)
+    return render(request, 'users/driver_list.html', context)
 
-    else:
-        return redirect("in/")    
+    # else:
+    #     return redirect("in/")    
     
     
 
@@ -126,21 +135,30 @@ def guide_list(request):
 
     guide_filter = GuideFilter(request.GET, queryset=guides)
     
-    try:
-        name = request.GET['GuideSearch']
-    except:
-        name = {"GuideSearch":[]}
+    guides = guide_filter.qs
+
+    if request.method == 'GET':
+        form = GuideLanguageForm(request.GET)
+        if form.is_valid():
+            language = form.cleaned_data['language']
+    else:
+        form = GuideLanguageForm() 
+
+
+    name = func_valid_input('GuideSearch')
+
 
     if name:
         guides = guide_filter.qs.filter(user__name=F"{name}")
-    else:
-        guides = guide_filter.qs
+    if language:
+        guides = guide_filter.qs.filter(language__contains=language)
+        
 
-    if not guides.exists():
-        guides = Guide.objects.all()
+    # if not guides.exists():
+    #     guides = Guide.objects.all()
+    
 
-
-    context = {'guides':guides, 'guide_filter':guide_filter}
+    context = {'guides':guides, 'guide_filter':guide_filter, 'form':form}
 
 
     return render(request, 'users/guide_list.html', context)  
@@ -151,13 +169,6 @@ def agent_list(request):
 
     agent_filter = TourAgentsFilter(request.GET, queryset=agents)
     
-
-    def func_valid_input(key):
-        try:
-            name = request.GET[key]
-        except:
-            name = False
-        return name
 
     name = func_valid_input('AgentSearch')
 

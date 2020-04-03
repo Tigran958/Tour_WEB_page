@@ -38,6 +38,8 @@ class Driver(models.Model):
     car = models.IntegerField(choices=CAR_CHOICES,)
     production_year = models.IntegerField(_('year'), choices=year_choices())
     seats = models.IntegerField()
+    kid_seats = models.BooleanField(default=False)
+    invalid_chairs = models.BooleanField(default=False)
     price_per_km = models.IntegerField()
 
 
@@ -49,7 +51,7 @@ class CarImageModel(models.Model):
 class Guide(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE, related_name='guide')
-    language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
+    language = MultiSelectField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
     first_to_ten_price = models.IntegerField()
     ten_plus_one_price = models.IntegerField()
@@ -58,7 +60,6 @@ class Guide(models.Model):
     gender = models.IntegerField(choices=GENDER_CHOICES)
     age = models.IntegerField(choices=AGE_CHOICES)
     car_availability = models.BooleanField(default=False)
-    
 
 
 class GuideImageModel(models.Model):

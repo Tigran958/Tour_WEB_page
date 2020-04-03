@@ -14,10 +14,11 @@ class TourAgentsFilter(django_filters.FilterSet):
 		exclude = ('date_of_tour','first_to_ten_price')
 
 class GuideFilter(django_filters.FilterSet):
+
 	class Meta:
 		model = Guide
 		fields = '__all__'
-
+		exclude = ('language')
 
 class TourFilter(django_filters.FilterSet):
 	class Meta:
