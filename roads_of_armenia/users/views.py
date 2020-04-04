@@ -108,10 +108,10 @@ def driver_list(request):
     except:
         name = {"DriverSearch":[]}
 
-    if name:
-        drivers = driver_filter.qs.filter(user__name__contains=F"{name}")
-    else:
-        drivers = driver_filter.qs
+    # if name:
+    #     drivers = driver_filter.qs.filter(user__name__contains=F"{name}") petq a poxel driverin
+    # else:
+    #     drivers = driver_filter.qs
 
     if not drivers.exists():
         
@@ -144,12 +144,16 @@ def guide_list(request):
     else:
         form = GuideLanguageForm() 
 
+    try:
+        type(language)
+    except:
+        language = False
 
     name = func_valid_input('GuideSearch')
 
 
-    if name:
-        guides = guide_filter.qs.filter(user__name=F"{name}")
+    # if name:
+    #     guides = guide_filter.qs.filter(user__name=F"{name}") պետք ա անունը փոխել գիդինը
     if language:
         guides = guide_filter.qs.filter(language__contains=language)
         
@@ -251,6 +255,7 @@ def tour_list(request):
 @login_required
 def pic_upload(request,user_id=1):
     if request.method == "POST":
+
         form = TourCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -263,7 +268,8 @@ def pic_upload(request,user_id=1):
             return redirect('tour_creation') 
     else:
         form = TourCreationForm()
-
+        form.initial['tour'] = TourAgents.objects.get(user_id=user_id)
+        
     return render(request, 'users/tour_creation.html', {"form": form})
 
 def login_0(request):
@@ -274,7 +280,6 @@ def login_0(request):
             template_dict = {'1': '/driver_list', '2': '/client_page',
                             '3': '/guide_list', '4': '/tour_creation'
                             }
-            # key = form.cleaned_data['user_choices'] 
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(username=username,password=password)

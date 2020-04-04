@@ -12,17 +12,17 @@ def year_choices():
 
 
 class User(AbstractUser):
-    username = models.CharField(blank=True, null=True, max_length=255)
+    # username = models.CharField(blank=True, max_length=255)
     email = models.EmailField(_('email address'), unique=True)
-    bank_account = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=30)
+    # bank_account = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
+    # phone_number = models.CharField(max_length=30)
     user_choices = models.IntegerField(choices=USER_CHOICES, default=1)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}".format(self.email)
 
 
 class Client(models.Model):
@@ -68,24 +68,24 @@ class GuideImageModel(models.Model):
 
 
 class TourAgents(models.Model):
-    name = location = models.CharField(max_length=255)
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE, related_name='touragents')    
-    language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
+                                on_delete=models.CASCADE, related_name='touragents') 
+    name = models.CharField(max_length=255)   
+    # language = models.IntegerField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
     tour_type = models.IntegerField(_('tour_type'), choices=TOUR_CHOICES)
-    location = models.CharField(max_length=255)
+    # location = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 class Tour(models.Model):
-    name = models.CharField(max_length=255)
-    # mainimage = models.ImageField(upload_to='img', null=True, blank=True)
     tour = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
-    first_to_ten_price = models.IntegerField(default=0)
+    rout = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.IntegerField(default=0)
     date_of_tour = models.DateField(_("Date"), default=datetime.date.today)
-    quantity = models.IntegerField(default=0)
+    amount_of_place_left = models.IntegerField(default=0)
     
     def __str__(self):
         return self.name
@@ -93,6 +93,13 @@ class Tour(models.Model):
 class TourImage(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True, blank=True)
     image = models.ForeignKey(Tour, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.image.name 
+
+class TourAgentImage(models.Model):
+    mainimage = models.ImageField(upload_to='img', null=True, blank=True)
+    image = models.ForeignKey(TourAgents, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.image.name 

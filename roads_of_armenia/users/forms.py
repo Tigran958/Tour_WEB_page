@@ -10,7 +10,8 @@ class CustomUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'bank_account', 'name', 'phone_number','user_choices']
+        # fields = ['username', 'email', 'bank_account', 'name', 'phone_number','user_choices']
+        fields = ['email','user_choices']
         widgets = {'user_choices': forms.HiddenInput()}
 
 
@@ -58,7 +59,6 @@ class TourAgentsUserCreationForm(ModelForm):
     class Meta:
         model = TourAgents
         fields = '__all__'
-        # fields = ['*']
 
 
 CollectionTitleFormSetTourAgents = inlineformset_factory(
@@ -69,8 +69,8 @@ CollectionTitleFormSetTourAgents = inlineformset_factory(
 class TourCreationForm(ModelForm):
     class Meta:
         model = Tour
-        fields = '__all__'  
-  
+        fields = '__all__'
+        widgets = {'tour': forms.HiddenInput()}
 
 class LoginForm(ModelForm):
     class Meta:
