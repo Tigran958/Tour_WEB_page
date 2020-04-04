@@ -12,7 +12,7 @@ def year_choices():
 
 
 class User(AbstractUser):
-    # username = models.CharField(blank=True, max_length=255)
+    username = models.CharField(blank=True, max_length=255)
     email = models.EmailField(_('email address'), unique=True)
     # bank_account = models.CharField(max_length=255)
     # name = models.CharField(max_length=255)
