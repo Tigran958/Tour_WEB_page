@@ -3,11 +3,29 @@
 	{% csrf_token %}
     {{ form.as_p }}
     {{ titles.as_p }}
+    
+{% if request.path == "/signup/4" %}
+
     <table>
+    	<h1> a 
+    	{{ request.path }}</h1>
       <tr>
         <td>Select Pictures: </td><td><input name="files" type="file" size="50" accept="image/*" multiple required>  </td>
         <td></td>
        </tr>
     </table>
+  {% endif %}
+  {% if request.path == "/signup/3" %}
+
+    	<h1> a 
+    	{{ request.path }}</h1>
+      <
+  {% endif %}
+  {% if request.path == "/signup/2" %}
+
+    	<h1> a 2
+    	{{ request.path }}</h1>
+      <
+  {% endif %}
     <input type="submit" value="Save">
 </form>

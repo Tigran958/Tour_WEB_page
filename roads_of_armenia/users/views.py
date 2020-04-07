@@ -29,7 +29,7 @@ class UserSignUpView(CreateView):
     model = User
     form_class = CustomUserForm
     template_name = 'users/signup.html'
-
+    
     def get_context_data(self, **kwargs):
         filter_key = self.kwargs['key']
         filter_dict = {'1':CollectionTitleFormSet, '2': CollectionTitleFormSetClient,

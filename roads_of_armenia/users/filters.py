@@ -18,7 +18,7 @@ class GuideFilter(django_filters.FilterSet):
 	class Meta:
 		model = Guide
 		fields = '__all__'
-		exclude = ('language')
+		exclude = ('language','profile_image')
 
 class TourFilter(django_filters.FilterSet):
 	class Meta:

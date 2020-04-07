@@ -51,15 +51,14 @@ class CarImageModel(models.Model):
 class Guide(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE, related_name='guide')
+    name = models.CharField(max_length=255)
     language = MultiSelectField(_('language'), choices=LANGUAGES_CHOICES)
     about_me = models.CharField(max_length=255)
-    first_to_ten_price = models.IntegerField()
-    ten_plus_one_price = models.IntegerField()
-    location = models.CharField(max_length=255)
-    location_based_price = models.IntegerField()
+    profile_image = models.ImageField(upload_to='img', null=True)
     gender = models.IntegerField(choices=GENDER_CHOICES)
     age = models.IntegerField(choices=AGE_CHOICES)
     car_availability = models.BooleanField(default=False)
+
 
 
 class GuideImageModel(models.Model):
