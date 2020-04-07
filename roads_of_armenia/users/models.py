@@ -57,7 +57,16 @@ class Guide(models.Model):
     profile_image = models.ImageField(upload_to='img', null=True)
     gender = models.IntegerField(choices=GENDER_CHOICES)
     age = models.IntegerField(choices=AGE_CHOICES)
+    experience = models.IntegerField()
+    tour_type = models.IntegerField(choices=TOUR_CHOICES)
+    region = models.IntegerField(choices=REGION_CHOICES)
+    free_days = MultiSelectField(choices=WEEK_DAY_CHOICES)
     car_availability = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return self.name
+
 
 
 

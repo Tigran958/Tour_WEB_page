@@ -31,6 +31,22 @@ GENDER_CHOICES = (
 AGE_CHOICES = (
     (1, _("18-25")),
     (2, _("25-35")),
-    (2, _("35+"))
+    (3, _("35+"))
 )
 
+REGION_CHOICES = (
+    (1, _("Armavir")),
+    (2, _("Yerevan")),
+    (3, _("Kotayq"))
+)
+
+
+WEEK_DAY_CHOICES = (
+    (1, _("Monday")),
+    (2, _("Tuesday")),
+    (3, _("Wednesday")),
+    (4, _("Thursday")),
+    (5, _("Frayday")),
+    (6, _("Saturday")),
+    (7, _("Sunday"))
+    )
