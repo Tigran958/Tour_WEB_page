@@ -1,5 +1,5 @@
 {% load static %}
-<form method="post" action=''>
+<form method="post" action='' enctype="multipart/form-data">
 	{% csrf_token %}
     {{ form.as_p }}
     {{ titles.as_p }}

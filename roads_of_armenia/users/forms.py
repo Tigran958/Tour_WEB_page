@@ -54,6 +54,7 @@ CollectionTitleFormSetGuide = inlineformset_factory(
     fields='__all__', extra=1, can_delete=True
 )
 
+
 class TourAgentsUserCreationForm(ModelForm):
 
     class Meta:

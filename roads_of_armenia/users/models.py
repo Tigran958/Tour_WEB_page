@@ -47,6 +47,13 @@ class CarImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
     image = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='aa')
 
+# class Car(models.Model):
+#     car = models.IntegerField(choices=CAR_CHOICES,)
+#     production_year = models.IntegerField(_('year'), choices=year_choices())
+#     seats = models.IntegerField()
+#     kid_seats = models.BooleanField(default=False)
+#     invalid_chairs = models.BooleanField(default=False)
+#     image = models.ImageField(upload_to='img', null=True)
 
 class Guide(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
@@ -61,7 +68,15 @@ class Guide(models.Model):
     tour_type = models.IntegerField(choices=TOUR_CHOICES)
     region = models.IntegerField(choices=REGION_CHOICES)
     free_days = MultiSelectField(choices=WEEK_DAY_CHOICES)
+    trip_image = models.ImageField(upload_to='img', null=True, blank=True)
     car_availability = models.BooleanField(default=False)
+
+    car = models.IntegerField(choices=CAR_CHOICES,null=True)
+    production_year = models.IntegerField(_('year'), choices=year_choices(), null=True)
+    seats = models.IntegerField(null=True)
+    kid_seats = models.BooleanField(default=False, null=True)
+    invalid_chairs = models.BooleanField(default=False, null=True)
+    car_image = models.ImageField(upload_to='img', null=True)
 
 
     def __str__(self):
@@ -73,6 +88,8 @@ class Guide(models.Model):
 class GuideImageModel(models.Model):
     mainimage = models.ImageField(upload_to='img', null=True)
     image = models.ForeignKey(Guide, on_delete=models.CASCADE)
+
+
 
 
 class TourAgents(models.Model):

@@ -29,7 +29,7 @@ class UserSignUpView(CreateView):
     model = User
     form_class = CustomUserForm
     template_name = 'users/signup.html'
-    
+
     def get_context_data(self, **kwargs):
         filter_key = self.kwargs['key']
         filter_dict = {'1':CollectionTitleFormSet, '2': CollectionTitleFormSetClient,
@@ -40,7 +40,9 @@ class UserSignUpView(CreateView):
         def filter_type(TitleFormSet,key):  
             data = super(UserSignUpView, self).get_context_data(**kwargs)
             if self.request.POST:
-                data['titles'] = TitleFormSet(self.request.POST)
+                print(self.request.FILES)
+                data['titles'] = TitleFormSet(self.request.POST,self.request.FILES)
+                
             else:
                 data['titles'] = TitleFormSet()
                 data['form'].fields['user_choices'].initial = key
@@ -54,6 +56,7 @@ class UserSignUpView(CreateView):
         
         context = self.get_context_data()
         titles = context["titles"]
+        # print(titles.__dict__)
 
         self.object = form.save()
         user_choices = form.cleaned_data.get('user_choices')
