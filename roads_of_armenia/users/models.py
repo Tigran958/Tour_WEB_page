@@ -35,6 +35,15 @@ class Client(models.Model):
 class Driver(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE, related_name='driver')
+    name = models.CharField(max_length=255)
+    language = MultiSelectField(_('language'), choices=LANGUAGES_CHOICES)
+    about_me = models.CharField(max_length=255)
+    profile_image = models.ImageField(upload_to='img', null=True)
+    gender = models.IntegerField(choices=GENDER_CHOICES)
+    age = models.IntegerField(choices=AGE_CHOICES)
+    experience = models.IntegerField()
+    free_days = MultiSelectField(choices=WEEK_DAY_CHOICES)
+    
     car = models.IntegerField(choices=CAR_CHOICES,)
     production_year = models.IntegerField(_('year'), choices=year_choices())
     seats = models.IntegerField()
