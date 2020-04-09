@@ -80,5 +80,9 @@ class LoginForm(ModelForm):
     password = forms.CharField(max_length=32, widget=forms.PasswordInput)
 
 
-class GuideLanguageForm(forms.Form):
-    language = forms.ChoiceField(choices=LANGUAGES_CHOICES)
+class GuideForm(ModelForm):
+    class Meta:
+        model = Guide
+        fields = ['name',]
+    name = forms.CharField(required=False)
+    language = forms.ChoiceField(choices=LANGUAGES_CHOICES, required=False)

@@ -1,4 +1,18 @@
+{% load static %}
 <h1>Tour Agents</h1>
+
+<div>
+    {% if request.user.is_authenticated %}
+      <a class="log">{{ user.email }}</a>
+      <a class="log" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+      <a class="log" href="{% url 'login' %}">Login</a>
+      <a class="reg" href="{% url 'reg_home'  %}">Register</a>
+    {% endif %}
+  </div>
+  <br>
+  <br>
+  <br>
 
 
 <div>

@@ -99,27 +99,29 @@ def tour_creation(request):
 
 # @login_required
 def driver_list(request):
-    # print(request.user.user_choices)
-    # if request.user.user_choices == 1:
+
+    def func_valid_input(key):
+        try:
+            name = request.POST[key]
+        except:
+            name = False
+        return name
     drivers = Driver.objects.all().prefetch_related("aa")
 
-    driver_filter = DriverFilter(request.GET, queryset=drivers)
+    driver_filter = DriverFilter(request.POST, queryset=drivers)
     
 
-    try:
-        name = request.GET['DriverSearch']
-    except:
-        name = {"DriverSearch":[]}
+    name = func_valid_input('DriverSearch')
 
-    # if name:
-    #     drivers = driver_filter.qs.filter(user__name__contains=F"{name}") petq a poxel driverin
+    if name:
+        drivers = drivers.filter(name__contains=F"{name}")
     # else:
     #     drivers = driver_filter.qs
 
-    if not drivers.exists():
+    # if not drivers.exists():
         
             
-        drivers = Driver.objects.all().prefetch_related("aa")
+    #     drivers = Driver.objects.all().prefetch_related("aa")
 
     context = {'drivers':drivers, 'driver_filter': driver_filter}
 
@@ -133,32 +135,43 @@ def driver_list(request):
 
 
 def guide_list(request):
+
+    def func_valid_input(key):
+        try:
+            name = request.POST[key]
+        except:
+            name = False
+        return name
+
     guides = Guide.objects.all()
 
 
-    guide_filter = GuideFilter(request.GET, queryset=guides)
+    guide_filter = GuideFilter(request.POST, queryset=guides)
     
     guides = guide_filter.qs
 
-    if request.method == 'GET':
-        form = GuideLanguageForm(request.GET)
+    if request.method == 'POST':
+        form = GuideForm(request.POST)
         if form.is_valid():
             language = form.cleaned_data['language']
+            name = form.cleaned_data['name']
     else:
-        form = GuideLanguageForm() 
+        form = GuideForm() 
 
     try:
         type(language)
     except:
         language = False
+    try:
+        type(name)
+    except:
+        name = False
 
-    name = func_valid_input('GuideSearch')
 
-
-    # if name:
-    #     guides = guide_filter.qs.filter(user__name=F"{name}") պետք ա անունը փոխել գիդինը
+    if name:
+        guides = guides.filter(name__contains=F"{name}") #պետք ա անունը փոխել գիդինը
     if language:
-        guides = guide_filter.qs.filter(language__contains=language)
+        guides = guides.filter(language__contains=language)
         
 
     # if not guides.exists():

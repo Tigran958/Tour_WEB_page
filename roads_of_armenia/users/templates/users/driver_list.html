@@ -1,9 +1,25 @@
+{% load static %}
 <h1>driver list</h1>
 
 <div>
-    <form method="GET">
-      
-      <input type="text" name="DriverSearch" placeholder="type something...">
+    {% if request.user.is_authenticated %}
+      <a class="log">{{ user.email }}</a>
+      <a class="log" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+      <a class="log" href="{% url 'login' %}">Login</a>
+      <a class="reg" href="{% url 'reg_home' %}">Register</a>
+    {% endif %}
+  </div>
+  <br>
+  <br>
+  <br>
+
+<div>
+    <form method="POST">
+      {% csrf_token %}
+      <label>Driver Name</label>
+      <input type="text" name="DriverSearch" placeholder="Driver Name">
+
       {{ driver_filter.form }}
       	
       <button type="submit" name="search">Search</button>
@@ -14,16 +30,16 @@
 
 {% for i in drivers %}
 <h3>Driver</h3>
+
+<img src="{{i.profile_image.url}}" alt="jhsajd">
+
+
 <li>
-	bank account: {{i.user.bank_account}}
+	Name: {{i.name}}
 </li>
 
 <li>
-	Name: {{i.user.name}}
-</li>
-
-<li>
-	Phone number:{{i.user.phone_number}}
+  Gender: {{i.get_gender_display}}
 </li>
 <br>
 <li>

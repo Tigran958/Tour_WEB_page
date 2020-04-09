@@ -5,7 +5,8 @@ from .models import *
 class DriverFilter(django_filters.FilterSet):
 	class Meta:
 		model = Driver
-		fields = ['name',]#must updated#
+		fields = ['car','production_year','seats','kid_seats','invalid_chairs',] #must updated#
+
 
 class TourAgentsFilter(django_filters.FilterSet):
 	class Meta:
@@ -17,13 +18,13 @@ class GuideFilter(django_filters.FilterSet):
 
 	class Meta:
 		model = Guide
-		fields = ['name',]
+		fields = ['age', 'gender','car_availability',]
 		# exclude = ('language','profile_image')
 
 class TourFilter(django_filters.FilterSet):
 	class Meta:
 		model = Tour
-		fields = '__all__'
-		exclude = ('date_of_tour','first_to_ten_price','mainimage',)
+		fields = ["tour",]
+		exclude = ('date_of_tour','first_to_ten_price')
 
 

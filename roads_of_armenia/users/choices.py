@@ -13,10 +13,11 @@ CAR_CHOICES = (
 )
 
 LANGUAGES_CHOICES = (
+    ('', _("-------")),
     (1, _("Armenian")),
     (2, _("English")),
     (3, _("France")),
-    (4, _("Russian")),
+    (4, _("Russian"))
 )
 
 TOUR_CHOICES = (

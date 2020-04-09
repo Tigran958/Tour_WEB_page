@@ -1,11 +1,28 @@
+{% load static %}
 <h1>GuideList</h1>
+
+<div>
+    {% if request.user.is_authenticated %}
+      <a class="log">{{ user.email }}</a>
+      <a class="log" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+      <a class="log" href="{% url 'login' %}">Login</a>
+      <a class="reg" href="{% url 'reg_home' %}">Register</a>
+    {% endif %}
+  </div>
+  <br>
+  <br>
+  <br>
+
 
 
 <div>
-    <form method="GET">
+    <form method="POST">
+      {% csrf_token %}
       
-      <input type="text" name="GuideSearch" placeholder="type something...">
+      <!-- <input type="text" name="GuideName" placeholder="type GuideName..."> -->
       {{form.language}}
+      {{form.name}}
       {{ guide_filter.form }}
       
       <button type="submit" name="search">Search</button>
@@ -15,20 +32,15 @@
 
 
 {% for i in guides %}
+<h2>Guide</h2>
+
 <img src="{{i.profile_image.url}}" alt="jhsajd">
 
-<h2>Guide</h2>
-<li>
-	bank account: {{i.user.bank_account}}
-</li>
 
 <li>
-	Name: {{i.user.name}}
+	Name: {{i.name}}
 </li>
 
-<li>
-	Phone number:{{i.user.phone_number}}
-</li>
 <br>
 <li>
 	Language:{{i.get_language_display}}
@@ -36,18 +48,11 @@
 <li>
 	About Guide:{{i.about_me}}
 </li>
-<li>
-	First to ten price:{{i.first_to_ten_price}}
-</li>
-<li>
-	Ten plus one price:{{i.ten_plus_one_price}}
-</li>
+
 <li>
 	Location:{{i.location}}
 </li>
-<li>
-	Location based price:{{i.location_based_price}}
-</li>
+
 <br>
 <br>
 <br>
